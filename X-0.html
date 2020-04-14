@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Крестики-нолики</title>
+        <style>
+            table {
+                border: 2px solid black;
+                margin-left: 100px;
+                margin-top: 15px;
+            }
+            td {
+                border: 2px solid black;
+                padding: 20px;
+            }
+            caption {
+                padding-bottom: 20px;;
+            }
+
+            .red-X {
+                background-color: red;
+            }
+            .blue-Y {
+                background-color: blue;
+            }
+            .name {
+                font-style: italic;
+                font-weight: bold;
+                font-size: 28px;
+                margin-left: 10px;
+                color: red;
+            }
+            .o {
+                color: blue;
+            }
+            .game {
+                color: black;
+                font-style: normal;
+            }
+            .inf {
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .but {
+                margin-top: 20px;
+                margin-left: 150px;
+                padding: 5px;
+                border-radius: 10%;
+                font-weight: bold;
+            }
+            .count {
+                margin-left: 150px;
+                margin-top: 10px;
+                font-weight: bold;
+            }
+            .stop {
+                background-color: '';
+            }
+
+        </style>
+    </head>
+    <body>
+    <div class="name"><span class="game">Игра:</span> Крестики<span class="game">-</span><span class="o">нолики</span></div>
+    <div class="count" id="count">Счет Player 1:<span id="cntX"> </span> --- Player 2:<span id="cnt0"> </span></div>
+    <table id="tab" name="tab">
+            <caption id="info" class="inf"></caption>
+            <tr>
+                <td id="o1">1</td>
+                <td id="t2">2</td>
+                <td id="t3">3</td>
+            </tr>
+            <tr>
+                <td id="f4">4</td>
+                <td id="f5">5</td>
+                <td id="s6">6</td>
+            </tr>
+            <tr>
+                <td id="s7">7</td>
+                <td id="e8">8</td>
+                <td id="n9">9</td>
+            </tr>
+        </table>
+
+        <button type="reset" id="reset" class="but" id="button">Сбросить</button>
+
+        <script>
+
+            let one = document.getElementById('o1'),
+            two = document.getElementById('t2'),
+            three = document.getElementById('t3'),
+            four = document.getElementById('f4'),
+            five = document.getElementById('f5'),
+            six = document.getElementById('s6'),
+            seven = document.getElementById('s7'),
+            eight = document.getElementById('e8'),
+            nine = document.getElementById('n9');
+
+            let reset = document.getElementById("reset");
+            reset.addEventListener("click", () => {
+             document.getElementById("o1").innerHTML = "1",
+             document.getElementById("o1").classList.remove('red-X'),
+             document.getElementById("o1").classList.remove('blue-Y'),
+             document.getElementById("t2").innerHTML = "2",
+             document.getElementById("t2").classList.remove('red-X'),
+             document.getElementById("t2").classList.remove('blue-Y'),
+             document.getElementById("t3").innerHTML = "3",
+             document.getElementById("t3").classList.remove('red-X'),
+             document.getElementById("t3").classList.remove('blue-Y'),
+             document.getElementById("f4").innerHTML = "4",
+             document.getElementById("f4").classList.remove('red-X'),
+             document.getElementById("f4").classList.remove('blue-Y'),
+             document.getElementById("f5").innerHTML = "5",
+             document.getElementById("f5").classList.remove('red-X'),
+             document.getElementById("f5").classList.remove('blue-Y'),
+             document.getElementById("s6").innerHTML = "6",
+             document.getElementById("s6").classList.remove('red-X'),
+             document.getElementById("s6").classList.remove('blue-Y'),
+             document.getElementById("s7").innerHTML = "7",
+             document.getElementById("s7").classList.remove('red-X'),
+             document.getElementById("s7").classList.remove('blue-Y'),
+             document.getElementById("e8").innerHTML = "8",
+             document.getElementById("e8").classList.remove('red-X'),
+             document.getElementById("e8").classList.remove('blue-Y'),
+             document.getElementById("n9").innerHTML = "9",
+             document.getElementById("n9").classList.remove('red-X'),
+             document.getElementById("n9").classList.remove('blue-Y');
+            });
+            
+            let combinationToWin = [
+                [one, two, three],
+                [one, four, seven],
+                [one, five, nine],
+                [two, five, eight],
+                [three, six, nine],
+                [three, five, seven],
+                [four, five, six],
+                [seven, eight, nine]
+            ];
+
+            let player1 = document.getElementById("cntX"); 
+            let player2 = document.getElementById("cnt0"); 
+            let markerX = 1;
+            let marker0 = 2;
+
+           let winFunc = function Winner (arr) {
+                arr.map((item) => {
+                    if(item[0].innerHTML == "X" && item[1].innerHTML == "X" && item[2].innerHTML == "X") {
+                        alert("Победили: Х");
+                        document.getElementById("o1").innerHTML = "1",
+                        document.getElementById("o1").classList.remove('red-X'),
+                        document.getElementById("o1").classList.remove('blue-Y'),
+                        document.getElementById("t2").innerHTML = "2",
+                        document.getElementById("t2").classList.remove('red-X'),
+                        document.getElementById("t2").classList.remove('blue-Y'),
+                        document.getElementById("t3").innerHTML = "3",
+                        document.getElementById("t3").classList.remove('red-X'),
+                        document.getElementById("t3").classList.remove('blue-Y'),
+                        document.getElementById("f4").innerHTML = "4",
+                        document.getElementById("f4").classList.remove('red-X'),
+                        document.getElementById("f4").classList.remove('blue-Y'),
+                        document.getElementById("f5").innerHTML = "5",
+                        document.getElementById("f5").classList.remove('red-X'),
+                        document.getElementById("f5").classList.remove('blue-Y'),
+                        document.getElementById("s6").innerHTML = "6",
+                        document.getElementById("s6").classList.remove('red-X'),
+                        document.getElementById("s6").classList.remove('blue-Y'),
+                        document.getElementById("s7").innerHTML = "7",
+                        document.getElementById("s7").classList.remove('red-X'),
+                        document.getElementById("s7").classList.remove('blue-Y'),
+                        document.getElementById("e8").innerHTML = "8",
+                        document.getElementById("e8").classList.remove('red-X'),
+                        document.getElementById("e8").classList.remove('blue-Y'),
+                        document.getElementById("n9").innerHTML = "9",
+                        document.getElementById("n9").classList.remove('red-X'),
+                        document.getElementById("n9").classList.remove('blue-Y'),
+                        markerX;//1 
+                        if(users.markerOneGamer == markerX){ 
+                            users.scoreOne = ++pointX;
+                            player1.innerHTML = users.scoreOne;
+                            console.log(users); 
+                            return marker0 = 1, markerX = 2, x();
+                        }
+                        else if(users.markerTwoGamer == markerX) {
+                            users.scoreTwo = ++point0;
+                            player2.innerHTML = users.scoreTwo;
+                            console.log(users); 
+                            return marker0 = 2, markerX = 1, x();
+                        }
+                         
+                    } 
+                    else if(item[0].innerHTML == "0" && item[1].innerHTML == "0" && item[2].innerHTML == "0") {
+                        alert("Победили: 0");
+                        document.getElementById("o1").innerHTML = "1",
+                        document.getElementById("o1").classList.remove('red-X'),
+                        document.getElementById("o1").classList.remove('blue-Y'),
+                        document.getElementById("t2").innerHTML = "2",
+                        document.getElementById("t2").classList.remove('red-X'),
+                        document.getElementById("t2").classList.remove('blue-Y'),
+                        document.getElementById("t3").innerHTML = "3",
+                        document.getElementById("t3").classList.remove('red-X'),
+                        document.getElementById("t3").classList.remove('blue-Y'),
+                        document.getElementById("f4").innerHTML = "4",
+                        document.getElementById("f4").classList.remove('red-X'),
+                        document.getElementById("f4").classList.remove('blue-Y'),
+                        document.getElementById("f5").innerHTML = "5",
+                        document.getElementById("f5").classList.remove('red-X'),
+                        document.getElementById("f5").classList.remove('blue-Y'),
+                        document.getElementById("s6").innerHTML = "6",
+                        document.getElementById("s6").classList.remove('red-X'),
+                        document.getElementById("s6").classList.remove('blue-Y'),
+                        document.getElementById("s7").innerHTML = "7",
+                        document.getElementById("s7").classList.remove('red-X'),
+                        document.getElementById("s7").classList.remove('blue-Y'),
+                        document.getElementById("e8").innerHTML = "8",
+                        document.getElementById("e8").classList.remove('red-X'),
+                        document.getElementById("e8").classList.remove('blue-Y'),
+                        document.getElementById("n9").innerHTML = "9",
+                        document.getElementById("n9").classList.remove('red-X'),
+                        document.getElementById("n9").classList.remove('blue-Y'),
+                        marker0;//2 
+                        if(users.markerOneGamer == marker0){ 
+                            users.scoreOne = ++pointX;
+                            player1.innerHTML = users.scoreOne;
+                            console.log(users);
+                            return marker0 = 2, markerX = 1; 
+                        }   
+                        else if(users.markerTwoGamer == marker0) {
+                            users.scoreTwo = ++point0;
+                            player2.innerHTML = users.scoreTwo;
+                            console.log(users);
+                            return marker0 = 1, markerX = 2;
+                        }
+                        
+                    }
+
+                })  
+           };
+           
+           let pointX = 0;
+           let point0 = 0;
+
+           let users = {
+               userOne: "Player1",
+               userTwo: "Player2",
+               scoreOne: 0,
+               scoreTwo: 0,
+               markerOneGamer: 1,
+               markerTwoGamer: 2,
+           };
+           /*
+           // Условие при котором побеждает X (возвращает маркер 1)
+           if(users.markerOneGamer == 1){ 
+             users.scoreOne = ++pointX;
+             markerX = 2;
+           }
+           else if(users.markerTwoGamer == 2) {
+             users.scoreTwo = ++point0;
+             markerX = 1;
+           }
+           
+           // Условие при котором побеждает 0 (возвращает маркер 2)
+           if(users.markerOneGamer == 1){ 
+             users.scoreOne = ++pointX;
+             marker0 = 2;
+           }
+           else if(users.markerTwoGamer == 2) {
+             users.scoreTwo = ++point0;
+             marker0 = 1;
+           }
+
+
+           let user1 = {
+               name: "Player1",
+               score: 0,
+               marker: 1,
+           };    
+           let user2 = {
+               name: "Player2",
+               score: 0,
+               marker: 2,
+           };       
+           // Условие при котором побеждает X
+           if(user1.marker == 1){ 
+                player1.innerHTML = '1';
+                user1.marker = 2;
+           }
+           if(user2.marker == 1){
+                player2.innerHTML = '1';
+           }
+           // Условие при котором побеждает 0
+           if(user1.marker == 2){ 
+                player1.innerHTML = '1';
+                user1.marker = 1;
+           }
+           if(user2.marker == 2){
+                player2.innerHTML = '1';
+                user2.marker = 1;
+           }
+           */
+           function x (event) {
+             let tdCell = event.target.closest('td');
+             if(!tdCell) return;
+             if(tdCell.innerHTML == "0") return;
+             
+             tdCell.innerHTML = "X";
+             tdCell.classList.add("red-X");
+             
+             let inform = document.getElementById("info");
+             inform.innerHTML = "Следующий ход: 0";
+
+             winFunc(combinationToWin);
+
+             tab.removeEventListener("click", x);
+             tab.addEventListener("click", o)
+            };
+            
+           function o (event) {
+             let tdCell = event.target.closest('td');
+             if(!tdCell) return;
+             if(tdCell.innerHTML == "X") return;
+             
+             tdCell.innerHTML = "0";
+             tdCell.classList.add("blue-Y");
+
+             let inform = document.getElementById("info");
+             inform.innerHTML = "Следующий ход: X";
+
+             winFunc(combinationToWin);
+
+             tab.removeEventListener("click", o);
+             tab.addEventListener("click", x);
+            };
+
+           tab.addEventListener("click", x); //Engine
+            
+           tab.addEventListener("mouseover", (event) => {
+             let target = event.target;
+             target.style.background = 'yellow';
+            });
+
+            tab.addEventListener("mouseout", (event) => {
+             let target = event.target;
+             target.style.background = '';
+            });
+            
+        </script>
+
+    </body>
+</html># tic-tac-toe
+https://github.com//edwKEY/tic-tac-toe.git
