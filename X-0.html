@@ -136,10 +136,21 @@
                 [seven, eight, nine]
             ];
 
+            let firstPlayer = {
+               name: 'Player1',
+               scores: 0,
+               marker: 1,
+           }; 
+           let secondPlayer = {
+               name: 'Player2',
+               score: 0,
+               marker: 2,
+           };
+
             let player1 = document.getElementById("cntX"); 
             let player2 = document.getElementById("cnt0"); 
-            let markerX = 1;
-            let marker0 = 2;
+            const markerX = 1;
+            const marker0 = 2;
 
            let winFunc = function Winner (arr) {
                 arr.map((item) => {
@@ -173,19 +184,19 @@
                         document.getElementById("n9").classList.remove('red-X'),
                         document.getElementById("n9").classList.remove('blue-Y'),
                         markerX;//1 
-                        if(users.markerOneGamer == markerX){ 
-                            users.scoreOne = ++pointX;
-                            player1.innerHTML = users.scoreOne;
-                            console.log(users); 
-                            return marker0 = 1, markerX = 2, x();
+                        if(markerX == firstPlayer.marker) {
+                            firstPlayer.scores = firstPlayer.scores + 1;
+                            player1.innerHTML = firstPlayer.scores;
+                            console.log(firstPlayer);
+                            x();
+                            return [firstPlayer.marker = 2, secondPlayer.marker = 1];
                         }
-                        else if(users.markerTwoGamer == markerX) {
-                            users.scoreTwo = ++point0;
-                            player2.innerHTML = users.scoreTwo;
-                            console.log(users); 
-                            return marker0 = 2, markerX = 1, x();
-                        }
-                         
+                        else if(markerX == secondPlayer.marker) {
+                            secondPlayer.score = secondPlayer.score + 1;
+                            player2.innerHTML = secondPlayer.score;
+                            console.log(secondPlayer);
+                            return [secondPlayer.marker = 2, firstPlayer.marker = 1];
+                        } 
                     } 
                     else if(item[0].innerHTML == "0" && item[1].innerHTML == "0" && item[2].innerHTML == "0") {
                         alert("Победили: 0");
@@ -217,86 +228,35 @@
                         document.getElementById("n9").classList.remove('red-X'),
                         document.getElementById("n9").classList.remove('blue-Y'),
                         marker0;//2 
-                        if(users.markerOneGamer == marker0){ 
-                            users.scoreOne = ++pointX;
-                            player1.innerHTML = users.scoreOne;
-                            console.log(users);
-                            return marker0 = 2, markerX = 1; 
-                        }   
-                        else if(users.markerTwoGamer == marker0) {
-                            users.scoreTwo = ++point0;
-                            player2.innerHTML = users.scoreTwo;
-                            console.log(users);
-                            return marker0 = 1, markerX = 2;
+                        if(marker0 == firstPlayer.marker) {
+                            firstPlayer.scores = firstPlayer.scores + 1;
+                            player1.innerHTML = firstPlayer.scores;
+                            console.log(firstPlayer);
+                            
+                            return [firstPlayer.marker = 1, secondPlayer.marker = 1];
                         }
-                        
+                        else if(marker0 == secondPlayer.marker) {
+                            secondPlayer.score = secondPlayer.score + 1;
+                            player2.innerHTML = secondPlayer.score;
+                            console.log(secondPlayer);
+                            return [secondPlayer.marker = 1, firstPlayer.marker = 2];
+                        }                          
                     }
 
                 })  
            };
-           
-           let pointX = 0;
-           let point0 = 0;
 
-           let users = {
-               userOne: "Player1",
-               userTwo: "Player2",
-               scoreOne: 0,
-               scoreTwo: 0,
-               markerOneGamer: 1,
-               markerTwoGamer: 2,
-           };
-           /*
-           // Условие при котором побеждает X (возвращает маркер 1)
-           if(users.markerOneGamer == 1){ 
-             users.scoreOne = ++pointX;
-             markerX = 2;
-           }
-           else if(users.markerTwoGamer == 2) {
-             users.scoreTwo = ++point0;
-             markerX = 1;
-           }
-           
-           // Условие при котором побеждает 0 (возвращает маркер 2)
-           if(users.markerOneGamer == 1){ 
-             users.scoreOne = ++pointX;
-             marker0 = 2;
-           }
-           else if(users.markerTwoGamer == 2) {
-             users.scoreTwo = ++point0;
-             marker0 = 1;
+           let nextTurn = 'X';
+
+           function changeRound () {
+               if(nextTurn == 'X') {
+                   nextTurn = '0';
+               } else {
+                   nextTurn = 'X';
+               }
            }
 
-
-           let user1 = {
-               name: "Player1",
-               score: 0,
-               marker: 1,
-           };    
-           let user2 = {
-               name: "Player2",
-               score: 0,
-               marker: 2,
-           };       
-           // Условие при котором побеждает X
-           if(user1.marker == 1){ 
-                player1.innerHTML = '1';
-                user1.marker = 2;
-           }
-           if(user2.marker == 1){
-                player2.innerHTML = '1';
-           }
-           // Условие при котором побеждает 0
-           if(user1.marker == 2){ 
-                player1.innerHTML = '1';
-                user1.marker = 1;
-           }
-           if(user2.marker == 2){
-                player2.innerHTML = '1';
-                user2.marker = 1;
-           }
-           */
-           function x (event) {
+           let x = function x (event) {
              let tdCell = event.target.closest('td');
              if(!tdCell) return;
              if(tdCell.innerHTML == "0") return;
@@ -343,7 +303,6 @@
             });
             
         </script>
-
+    
     </body>
-</html># tic-tac-toe
-https://github.com//edwKEY/tic-tac-toe.git
+</html>
