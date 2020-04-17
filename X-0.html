@@ -151,6 +151,7 @@
             let player2 = document.getElementById("cnt0"); 
             const markerX = 1;
             const marker0 = 2;
+            let step;
 
            let winFunc = function Winner (arr) {
                 arr.map((item) => {
@@ -188,14 +189,13 @@
                             firstPlayer.scores = firstPlayer.scores + 1;
                             player1.innerHTML = firstPlayer.scores;
                             console.log(firstPlayer);
-                            x();
-                            return [firstPlayer.marker = 2, secondPlayer.marker = 1];
+                            return [firstPlayer.marker = 2, secondPlayer.marker = 1, step = 'Player1'];
                         }
                         else if(markerX == secondPlayer.marker) {
                             secondPlayer.score = secondPlayer.score + 1;
                             player2.innerHTML = secondPlayer.score;
                             console.log(secondPlayer);
-                            return [secondPlayer.marker = 2, firstPlayer.marker = 1];
+                            return [secondPlayer.marker = 2, firstPlayer.marker = 1, step = 'Player2'];
                         } 
                     } 
                     else if(item[0].innerHTML == "0" && item[1].innerHTML == "0" && item[2].innerHTML == "0") {
@@ -232,7 +232,6 @@
                             firstPlayer.scores = firstPlayer.scores + 1;
                             player1.innerHTML = firstPlayer.scores;
                             console.log(firstPlayer);
-                            
                             return [firstPlayer.marker = 1, secondPlayer.marker = 1];
                         }
                         else if(marker0 == secondPlayer.marker) {
@@ -246,17 +245,7 @@
                 })  
            };
 
-           let nextTurn = 'X';
-
-           function changeRound () {
-               if(nextTurn == 'X') {
-                   nextTurn = '0';
-               } else {
-                   nextTurn = 'X';
-               }
-           }
-
-           let x = function x (event) {
+           function x (event) {
              let tdCell = event.target.closest('td');
              if(!tdCell) return;
              if(tdCell.innerHTML == "0") return;
@@ -269,8 +258,15 @@
 
              winFunc(combinationToWin);
 
+             if(step == 'Player1') {
+                return step = '';
+             }
+             else if(step == 'Player2') {
+                return step = '';
+             }
+
              tab.removeEventListener("click", x);
-             tab.addEventListener("click", o)
+             tab.addEventListener("click", o);
             };
             
            function o (event) {
