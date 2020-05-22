@@ -55,11 +55,61 @@
             .stop {
                 background-color: '';
             }
-
+            .room {
+                padding-left: 10px;
+            }
+            .inpRoom {
+                margin-left: 100px;
+                padding-left: 10px;
+            }
+            #wrapper, #loginform {
+                margin:0 auto;
+                padding-bottom:25px;
+                background:#EBF4FB;
+                width:504px;
+                border:1px solid #ACD8F0; }
+            
+            #loginform { padding-top:18px; }
+            
+            #loginform p { margin: 5px; }
+            
+            #chatbox {
+                text-align:left;
+                margin:0 auto;
+                margin-bottom:25px;
+                padding:10px;
+                background:#fff;
+                height:270px;
+                width:430px;
+                border:1px solid #ACD8F0;
+                overflow:auto; }
+            
+            #usermsg {
+                width:395px;
+                margin-left: 12px;
+                border:1px solid #ACD8F0; }
+            
+            #submit { width: 60px; }
+            
+            .error { color: #ff0000; }
+            
+            #menu { padding:12.5px 25px 12.5px 25px; }
+            
+            .welcome { float:left; }
+            
+            .logout { float:right; }
+            
+            .msgln { margin:0 0 2px 0; }
         </style>
     </head>
     <body>
     <div class="name"><span class="game">Игра:</span> Крестики<span class="game">-</span><span class="o">нолики</span></div>
+    <form action="" class="room">
+        <p>Укажите игровую комнату для подключения:</p>
+        <p><input class="inpRoom" type="text" id="gameRoom" size="30" value=""> <input type="button" id="submitRoom" value="Отправить"></p>
+    </form>
+    
+    <div>ID игровой комнаты: <strong><span id="roomId"></span></strong></div>
     <div class="count" id="count">Счет Player 1:<span id="cntX"> </span> --- Player 2:<span id="cnt0"> </span></div>
     <table id="tab" name="tab">
             <caption id="info" class="inf"></caption>
@@ -81,6 +131,23 @@
         </table>
 
         <button type="reset" id="reset" class="but" id="button">Сбросить</button>
+
+        <div id="wrapper">
+            <div id="menu">
+                  <p class="welcome">Hello <b></b></p>
+                  <p class="logout"><a id="exit" href="#">Exit</a></p>
+                  <div style="clear:both"></div>
+              </div>
+               
+              <div id="chatbox"></div>
+               
+              <form name="message" action="">
+                  <input name="usermsg" type="text" id="usermsg" size="63" />
+                  <!-- <input name="submitmsg" type="submit"  id="submitmsg" value="Send" />--->
+                  <button type="button" id="tt">Отправить</button>
+              </form>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 
         <script>
 
@@ -298,7 +365,72 @@
              target.style.background = '';
             });
             
+            let connectIDroom;
+            let rooM;
+            let chatName;
+            let contentMessage = document.getElementById('chatbox');
+            let usermessage;
+
+            let socket = io('ws://localhost:3001');
+	        console.log(socket);
+
+	        socket.on('action', (data) => {
+                switch(data.type){
+                    case 'roomInit': dataRoomInit = data;
+                    document.getElementById('roomId').innerHTML = dataRoomInit.data.id;
+                    connectIDroom = dataRoomInit.data.id;
+                    console.log('server data dataRoomInit', dataRoomInit);
+                    break;
+                    case 'gameInfo': dataGameInfo = data;
+                    console.log('server data dataGameInfo', dataGameInfo);
+                    break;
+                    case 'updateField': dataUpDateField = data;
+                    console.log('server data dataUpdateField', dataUpDateField);
+                    break;
+                    case 'switchCurrentPlayer': dataSwitchCurrentPlayer = data;
+                    console.log('server data dataSwitchCurrentPlayer', dataSwitchCurrentPlayer);
+                    break;
+                    case 'gameStart': dataGameStart = data;
+                    chatName = dataGameStart.data.client.name;
+                    console.log('server data dataGameStart', dataGameStart);
+                    break;
+                    case 'newMessage': dataNewMessage = data;
+                    console.log ('server data dataNewMessage', dataNewMessage);
+                    break;
+                    }
+            });
+            
+            submitRoom.addEventListener('click', ()=> {
+             rooM = document.getElementById('gameRoom').value;
+             roomView = document.getElementById('roomId');
+             socket.emit('action', {
+                 type: 'connectToRoom',
+                 data: {
+                     roomId: rooM,
+                     cb: function(data) {
+                        console.log(data);
+                    }}
+                })                 
+            });
+
+            let obj;
+            tt.addEventListener('click', ()=> {
+                obj = {
+                    type: 'message',
+                    data: {
+                        roomId: rooM,
+                        message: '',
+                        cb: function(data) {
+                            console.log(data);
+                            },
+                    },
+                };
+                obj.data.message = document.getElementById('usermsg').value;
+                socket.emit('action', obj);
+                contentMessage.innerHTML += `${chatName}: ` + obj.data.message + '<br>';
+            });
+
         </script>
-    
+
     </body>
 </html>
